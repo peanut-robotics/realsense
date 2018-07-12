@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>realsense_camera</name>
+  <version>0.0.0</version>
+  <description>The realsense_camera placeholder package</description>
+
+  <maintainer email="felix.messmer@mojin-robotics.de">Felix Messmer</maintainer>
+  <author email="felix.messmer@mojin-robotics.de">Felix Messmer</author>
+
+  <license>intern</license>
+
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+</package>

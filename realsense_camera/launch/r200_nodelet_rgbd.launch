@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+
+	<arg name="camera"/>
+	<arg name="num_worker_threads"/>
+	<arg name="serial_no"/>
+
+</launch>
+
