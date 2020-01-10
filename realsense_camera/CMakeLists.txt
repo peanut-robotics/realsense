@@ -8,3 +8,8 @@ catkin_package()
 install(DIRECTORY launch
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
+
+install(PROGRAMS
+  patch/patch_docker.sh
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
