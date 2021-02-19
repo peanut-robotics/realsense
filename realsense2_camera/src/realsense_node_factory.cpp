@@ -92,14 +92,14 @@ void RealSenseNodeFactory::getDevice(rs2::device_list list)
 		{
 			ROS_WARN("No RealSense devices were found!");
 			ros::Publisher chatter_pub = nh.advertise<std_msgs::String>("realsense_missoncontrol_health", 1000);
-            ros::Rate loop_rate(10);
-            std_msgs::String msg;
-            std::stringstream ss;
-            ss << "ERROR, Connection Check";
-            msg.data = ss.str();
-            chatter_pub.publish(msg);
-            ros::spinOnce();
-            loop_rate.sleep();
+			ros::Rate loop_rate(10);
+			std_msgs::String msg;
+			std::stringstream ss;
+			ss << "ERROR, Connection Check";
+			msg.data = ss.str();
+			chatter_pub.publish(msg);
+			ros::spinOnce();
+			loop_rate.sleep();
 		}
 		else
 		{
