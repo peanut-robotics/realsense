@@ -11,6 +11,7 @@
 #include <signal.h>
 #include <thread>
 #include <regex>
+#include <std_msgs/String.h>
 
 using namespace realsense2_camera;
 
@@ -90,7 +91,13 @@ void RealSenseNodeFactory::getDevice(rs2::device_list list)
 	{
 		if (0 == list.size())
 		{
-			ROS_WARN("No RealSense devices were found!");
+      std::stringstream ss;
+      ss << "ERROR: No Realsense device found";
+			ROS_ERROR_STREAM(ss.str());
+
+      std_msgs::String msg;
+      msg.data = ss.str();
+      health_pub.publish(msg);
 		}
 		else
 		{
@@ -132,7 +139,7 @@ void RealSenseNodeFactory::getDevice(rs2::device_list list)
 				}
 				else
 				{
-					ROS_INFO_STREAM("Device with port number " << port_id << " was found.");					
+					ROS_INFO_STREAM("Device with port number " << port_id << " was found.");
 				}
 				bool found_device_type(true);
 				if (!_device_type.empty())
@@ -209,7 +216,7 @@ void RealSenseNodeFactory::getDevice(rs2::device_list list)
 			ROS_INFO("Resetting device...");
 			_device.hardware_reset();
 			_device = rs2::device();
-			
+
 		}
 		catch(const std::exception& ex)
 		{
@@ -222,8 +229,15 @@ void RealSenseNodeFactory::change_device_callback(rs2::event_information& info)
 {
 	if (info.was_removed(_device))
 	{
-		ROS_ERROR("The device has been disconnected!");
-		_realSenseNode.reset(nullptr);
+		std::stringstream ss;
+		ss << "ERROR: Realsense device removed";
+    ROS_ERROR_STREAM(ss.str());
+
+    std_msgs::String msg;
+    msg.data = ss.str();
+		health_pub.publish(msg);
+
+    _realSenseNode.reset(nullptr);
 		_device = rs2::device();
 	}
 	if (!_device)
@@ -269,6 +283,8 @@ void RealSenseNodeFactory::onInit()
     toggle_sensor_srv = nh.advertiseService("enable", &RealSenseNodeFactory::toggle_sensor_callback, this);
 		std::string rosbag_filename("");
 		privateNh.param("rosbag_filename", rosbag_filename, std::string(""));
+
+    health_pub = nh.advertise<std_msgs::String>("health", 1, true);
 
 		if (!rosbag_filename.empty())
 		{
